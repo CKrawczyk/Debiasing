@@ -1,4 +1,4 @@
-"""
+r"""
 #####################################################################
 
 Copyright (C) 2001-2014, Michele Cappellari
@@ -222,7 +222,8 @@ import matplotlib.pyplot as plt
 from scipy.spatial import distance
 from scipy import ndimage
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
 
 def _sn_func(signal, noise, index):
     """
@@ -240,9 +241,10 @@ def _sn_func(signal, noise, index):
     Of course an analytic approximation of S/N speeds up the calculation.
 
     """
-    return  np.sum(signal[index])/np.sqrt(np.sum(noise[index]**2))
+    return np.sum(signal[index])/np.sqrt(np.sum(noise[index]**2))
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
 
 def _weighted_centroid(x, y, density):
     """
@@ -256,13 +258,11 @@ def _weighted_centroid(x, y, density):
 
     return xBar, yBar
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
 
 def _roundness(x, y, pixelSize):
-    """
-    Implements equation (5) of Cappellari & Copin (2003)
-
-    """
+    """Implements equation (5) of Cappellari & Copin (2003)"""
     n = x.size
     equivalentRadius = np.sqrt(n/np.pi)*pixelSize
     xBar, yBar = np.mean(x), np.mean(y)  # Geometric centroid here!
@@ -271,13 +271,11 @@ def _roundness(x, y, pixelSize):
 
     return roundness
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
 
 def _accretion(x, y, signal, noise, targetSN, pixelSize, quiet):
-    """
-    Implements steps (i)-(v) in section 5.1 of Cappellari & Copin (2003)
-
-    """
+    """Implements steps (i)-(v) in section 5.1 of Cappellari & Copin (2003)"""
     n = x.size
     classe = np.zeros(n, dtype=int)  # will contain the bin number of each given pixel
     good = np.zeros(n, dtype=bool)   # will contain 1 if the bin has been accepted as good
@@ -339,7 +337,7 @@ def _accretion(x, y, signal, noise, targetSN, pixelSize, quiet):
             # and (3) whether the resulting S/N would get closer to targetSN
             #
             if (np.sqrt(minDist) > 1.2*pixelSize or roundness > 0.3
-                or abs(SN - targetSN) > abs(SNOld - targetSN)):
+                    or abs(SN - targetSN) > abs(SNOld - targetSN)):
                 if SNOld > 0.8*targetSN:
                     good[currentBin] = 1
                 break
@@ -373,13 +371,11 @@ def _accretion(x, y, signal, noise, targetSN, pixelSize, quiet):
 
     return classe, pixelSize
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
 
 def _reassign_bad_bins(classe, x, y):
-    """
-    Implements steps (vi)-(vii) in section 5.1 of Cappellari & Copin (2003)
-
-    """
+    """Implements steps (vi)-(vii) in section 5.1 of Cappellari & Copin (2003)"""
     # Find the centroid of all succesful bins.
     # CLASS = 0 are unbinned pixels which are excluded.
     #
@@ -403,7 +399,8 @@ def _reassign_bad_bins(classe, x, y):
 
     return xnode, ynode
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
 
 def _cvt_equal_mass(x, y, signal, noise, xnode, ynode, quiet, wvt):
     """
@@ -458,7 +455,8 @@ def _cvt_equal_mass(x, y, signal, noise, xnode, ynode, quiet, wvt):
 
     return xnode[good], ynode[good], scale[good], it
 
-#-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
+
 
 def _compute_useful_bin_quantities(x, y, signal, noise, xnode, ynode, scale):
     """
@@ -488,7 +486,8 @@ def _compute_useful_bin_quantities(x, y, signal, noise, xnode, ynode, scale):
 
     return classe, xbar, ybar, sn, area
 
-#-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
+
 
 def _display_pixels(x, y, counts, pixelSize):
     """
@@ -510,11 +509,12 @@ def _display_pixels(x, y, counts, pixelSize):
                extent=[xmin - pixelSize/2, xmax + pixelSize/2,
                        ymin - pixelSize/2, ymax + pixelSize/2])
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
 
 def voronoi_2d_binning(x, y, signal, noise, targetSN, cvt=True,
-                         pixelsize=None, plot=True, quiet=True, wvt=False):
-    """
+                       pixelsize=None, plot=True, quiet=True, wvt=False):
+    r"""
     PURPOSE:
           Perform adaptive spatial binning of Integral-Field Spectroscopic
           (IFS) data to reach a chosen constant signal-to-noise ratio per bin.
@@ -584,7 +584,7 @@ def voronoi_2d_binning(x, y, signal, noise, targetSN, cvt=True,
         plt.subplot(211)
         rnd = np.argsort(np.random.random(xNode.size))  # Randomize bin colors
         _display_pixels(x, y, rnd[classe], pixelsize)
-        plt.plot(xNode, yNode, '+w', scalex=False, scaley=False) # do not rescale after imshow()
+        plt.plot(xNode, yNode, '+w', scalex=False, scaley=False)  # do not rescale after imshow()
         plt.xlabel('R (arcsec)')
         plt.ylabel('R (arcsec)')
         plt.title('Map of Voronoi bins')
@@ -602,4 +602,4 @@ def voronoi_2d_binning(x, y, signal, noise, targetSN, cvt=True,
 
     return classe, xNode, yNode, xBar, yBar, sn, area, scale
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------

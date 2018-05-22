@@ -1,4 +1,3 @@
-from astropy.table import Table, column
 import math
 import numpy as np
 import astropy.units as u
@@ -13,30 +12,30 @@ def z_to_dist(z):
 
 
 def dist_to_z(D):
-    return Distance.compute_z(D,cosmo)
+    return Distance.compute_z(D, cosmo)
 
 
-def mag_to_Mag(mag,z):
+def mag_to_Mag(mag, z):
     D = z_to_dist(z)
     Mag = mag - 5*(np.log10(D/(u.pc))-1)
     return Mag
 
 
-def Mag_to_mag(Mag,z):
+def Mag_to_mag(Mag, z):
     D = z_to_dist(z)
     mag = Mag + 5*(np.log10(D/(u.pc))-1)
     return mag
-  
-  
-def Mag_to_z(Mag,mag=17):
+
+
+def Mag_to_z(Mag, mag=17):
     D = 10**((mag-Mag+5)/5)*(u.pc)
     z = dist_to_z(D)
     return z
- 
-    
+
+
 def Mag_to_flux_density(Mag):
-    S = 3631*10**(Mag/-2.5)*u.Jy # AB -> flux density
-    L = S*(4*math.pi)*(10*u.pc)**2 # absolute magnitude = 10pc
+    S = 3631*10**(Mag/-2.5)*u.Jy  # AB -> flux density
+    L = S*(4*math.pi)*(10*u.pc)**2  # absolute magnitude = 10pc
     return L.to(u.erg/u.s/u.Hz)
 
 
@@ -46,7 +45,7 @@ def wavelength_to_frequency(wavelength):
     return frequency
 
 
-def Mag_to_lum(Mag,wavelength):
+def Mag_to_lum(Mag, wavelength):
     frequency = wavelength_to_frequency(wavelength*(u.Angstrom))
     L_density = Mag_to_flux_density(Mag)
     L = L_density*frequency
@@ -65,7 +64,7 @@ def solar_to_lum(logLsun):
     return L
 
 
-def lum_to_Mag(L,wavelength):
+def lum_to_Mag(L, wavelength):
     c = const.c
     frequency = wavelength_to_frequency(wavelength*(u.Angstrom))
     L_density = (L/frequency).to(u.erg/u.s/u.Hz)
