@@ -3,9 +3,9 @@ import math
 import numpy as np
 import astropy.units as u
 import astropy.constants as const
-from astropy.cosmology import FlatLambdaCDM
+from astropy.cosmology import Planck15
 from astropy.coordinates import Distance
-cosmo = FlatLambdaCDM(H0=70, Om0=0.3)
+cosmo = Planck15
 
 
 def z_to_dist(z):
@@ -26,14 +26,14 @@ def Mag_to_mag(Mag,z):
     D = z_to_dist(z)
     mag = Mag + 5*(np.log10(D/(u.pc))-1)
     return mag
-  
-  
+
+
 def Mag_to_z(Mag,mag=17):
     D = 10**((mag-Mag+5)/5)*(u.pc)
     z = dist_to_z(D)
     return z
- 
-    
+
+
 def Mag_to_flux_density(Mag):
     S = 3631*10**(Mag/-2.5)*u.Jy # AB -> flux density
     L = S*(4*math.pi)*(10*u.pc)**2 # absolute magnitude = 10pc

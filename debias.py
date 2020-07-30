@@ -10,7 +10,7 @@ def debias(data,params=params,dictionaries=dictionaries,question='features',
            verbose=True):
     function_dictionary = dictionaries.function_dictionary
     questions = dictionaries.questions
-    
+
     data_sample = sample.Sample(data,questions,params,question)
     bins = sample.Bins(data_sample,params,questions,question,answer)
     bins.voronoi_bin()
@@ -45,7 +45,7 @@ def debias(data,params=params,dictionaries=dictionaries,question='features',
         z = data_sample.all_data[params.z_column]
         chi2_bin = get_chi2(fv_debiased_bin[in_vl],fv[in_vl],z[in_vl])
         chi2_fit = get_chi2(fv_debiased[in_vl],fv[in_vl],z[in_vl])
-    
+
         if chi2_bin < chi2_fit:
             print('bin method preferred')
             fv_debiased_final = fv_debiased_bin
@@ -72,9 +72,9 @@ def histogram_fractions(data,hist_bins):
 
 
 def bin_by_column(column, nbins, fixedcount=True):
-    ''' Bin the data into redshift slices 
+    ''' Bin the data into redshift slices
     (or by any column) '''
-    
+
     sorted_indices = np.argsort(column)
     if fixedcount:
         bin_edges = np.linspace(0, 1, nbins + 1)
@@ -97,14 +97,14 @@ def get_chi2(dataset,reference,redshifts):
     hist_bins[0] = -1
     hist_bins[-1] = 2
     zv,zb = bin_by_column(redshifts,nbins=10)
-    
+
     rms_values = np.zeros(len(np.unique(zb)))
     ref_fractions = histogram_fractions(reference,hist_bins)
-    
+
     for i, z in enumerate(np.unique(zb)):
-        
+
         sample = dataset[zb == z]
         fractions = histogram_fractions(sample,hist_bins)
         rms_values[i] = np.sum((fractions-ref_fractions)**2)
-    
+
     return np.sum(rms_values)

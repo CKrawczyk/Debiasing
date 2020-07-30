@@ -1,4 +1,4 @@
-data_file = '/Volumes/SD_Extra/galaxy_zoo_nsa_matching/debias/nsa_to_debias_with_fractions.csv'
+data_file = '/Volumes/SD_Extra/galaxy_zoo_nsa_matching/nsa_all_gz_to_debias_with_fractions_one_to_one.csv'
 output_directory = '/Volumes/SD_Extra/galaxy_zoo_nsa_matching/debias/'
 
 logistic_bounds = ((0.5, 10), (-10, 10))
@@ -9,7 +9,7 @@ count_suffix = '_weight'
 fraction_suffix = '_weight_fraction'
 
 Mr_column = 'r_mag'
-R50_column = 'petroth50'
+R50_column = 'R_50_kpc'
 z_column = 'z'
 
 n_voronoi = 30
@@ -17,5 +17,5 @@ n_per_z = 50
 low_signal_limit = 100
 clip_percentile = 5
 
-volume_redshift_limits = (0.03, 0.10)
-survey_mag_limit = 19.8
+volume_redshift_limits = (0.02, 0.10)
+survey_mag_limit = 17.7
